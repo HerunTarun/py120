@@ -74,3 +74,7 @@ class RPSGame:
     def _play_again(self):
         answer = input('Would you like to play again? (y/n): ')
         return answer.lower().startswith('y')
+    
+
+
+RPSGame().play()
