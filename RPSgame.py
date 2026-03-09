@@ -4,12 +4,19 @@ class Player:
     CHOICES = ('rock', 'paper', 'scissors')
     def __init__(self, player_type):
         self._player_type = player_type.lower()
+        self._move = None
 
     def choose(self):
         if self._is_human():
-            pass
+            prompt = 'Pick rock, paper, or scissors: '
+            while True:
+                choice = input(prompt).lower()
+                if choice in Player.CHOICES:
+                    break
+                print(f'Invalid choice')
+            self.move = choice
         else:
-            return random.choice(Player.CHOICES)
+            self.move = random.choice(Player.CHOICES)
 
     def _is_human(self):
         return self._player_type == 'human'
