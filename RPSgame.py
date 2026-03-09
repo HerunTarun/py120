@@ -66,16 +66,22 @@ class RPSGame:
         print(f'You chose {self._human.move}')
         print(f'The computer chose {self._computer.move}')
 
-        if ((human_move == 'rock' and computer_move == 'scissors') or 
-            (human_move == 'paper' and computer_move == 'rock') or 
-            (human_move == 'scissors' and computer_move == 'paper')):
+        if self._human_wins(human_move, computer_move):
             print('You win!')
-        elif ((human_move == 'rock' and computer_move == 'paper') or 
-              (human_move == 'paper' and computer_move == 'scissors') or 
-              (human_move == 'scissors' and computer_move == 'rock')):
+        elif self._computer_wins(human_move, computer_move):
             print('You lose!')
         else:
             print("It's a tie!")
+
+    def _human_wins(self, human_move, computer_move):
+        return ((human_move == 'rock' and computer_move == 'scissors') or 
+            (human_move == 'paper' and computer_move == 'rock') or 
+            (human_move == 'scissors' and computer_move == 'paper'))
+
+    def _computer_wins(self, human_move, computer_move):
+        return ((human_move == 'rock' and computer_move == 'paper') or 
+              (human_move == 'paper' and computer_move == 'scissors') or 
+              (human_move == 'scissors' and computer_move == 'rock'))
 
     def _play_again(self):
         answer = input('Would you like to play again? (y/n): ')
