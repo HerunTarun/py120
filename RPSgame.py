@@ -1,9 +1,15 @@
 class Player:
-    def __init__(self):
-        pass
+    def __init__(self, player_type):
+        self._player_type = player_type.lower()
 
     def choose(self):
-        pass
+        if self._is_human():
+            pass
+        else:
+            pass
+
+    def _is_human(self):
+        return self._player_type == 'human'
 
 class Move:
     def __init__(self):
@@ -18,8 +24,8 @@ class Rule:
 
 class RPSGame:
     def __init__(self):
-        self._human = Player()
-        self._computer = Player()
+        self._human = Player('human')
+        self._computer = Player('computer')
 
     def play(self):
         self._display_welcome_message()
