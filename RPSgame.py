@@ -5,16 +5,16 @@ class Player:
     def __init__(self):
         self._move = None
 
-class Computer():
+class Computer(Player):
     def __init__(self):
-        self._move = None
+        super().__init__()
 
     def choose(self):
         self.move = random.choice(Player.CHOICES)
 
-class Human:
+class Human(Player):
     def __init__(self):
-        self._move = None
+        super().__init__()
 
     def choose(self):
         prompt = 'Pick rock, paper, or scissors: '
