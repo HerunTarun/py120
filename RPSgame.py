@@ -27,17 +27,6 @@ class Human(Player):
 
         self.move = choice
 
-class Move:
-    def __init__(self):
-        pass
-
-class Rule:
-    def __init__(self):
-        pass
-
-    def compare(self, move1, move2):
-        pass
-
 class RPSGame:
     def __init__(self):
         self._human = Human()
