@@ -2,24 +2,30 @@ import random
 
 class Player:
     CHOICES = ('rock', 'paper', 'scissors')
-    def __init__(self, player_type):
-        self._player_type = player_type.lower()
+    def __init__(self):
+        self._move = None
+
+class Computer():
+    def __init__(self):
         self._move = None
 
     def choose(self):
-        if self._is_human():
-            prompt = 'Pick rock, paper, or scissors: '
-            while True:
-                choice = input(prompt).lower()
-                if choice in Player.CHOICES:
-                    break
-                print(f'Invalid choice')
-            self.move = choice
-        else:
-            self.move = random.choice(Player.CHOICES)
+        self.move = random.choice(Player.CHOICES)
 
-    def _is_human(self):
-        return self._player_type == 'human'
+class Human:
+    def __init__(self):
+        self._move = None
+
+    def choose(self):
+        prompt = 'Pick rock, paper, or scissors: '
+        while True:
+            choice = input(prompt).lower()
+            if choice in Player.CHOICES:
+                break
+
+            print(f'Invalid choice')
+
+        self.move = choice
 
 class Move:
     def __init__(self):
@@ -34,8 +40,8 @@ class Rule:
 
 class RPSGame:
     def __init__(self):
-        self._human = Player('human')
-        self._computer = Player('computer')
+        self._human = Human()
+        self._computer = Computer()
 
     def play(self):
         self._display_welcome_message()
@@ -70,11 +76,10 @@ class RPSGame:
             print('You lose!')
         else:
             print("It's a tie!")
-    
+
     def _play_again(self):
         answer = input('Would you like to play again? (y/n): ')
         return answer.lower().startswith('y')
-    
 
 
 RPSGame().play()
