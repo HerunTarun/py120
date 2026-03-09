@@ -1,4 +1,7 @@
+import random
+
 class Player:
+    CHOICES = ('rock', 'paper', 'scissors')
     def __init__(self, player_type):
         self._player_type = player_type.lower()
 
@@ -6,7 +9,7 @@ class Player:
         if self._is_human():
             pass
         else:
-            pass
+            return random.choice(Player.CHOICES)
 
     def _is_human(self):
         return self._player_type == 'human'
