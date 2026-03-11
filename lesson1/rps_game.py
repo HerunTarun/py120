@@ -1,4 +1,5 @@
 import random
+import json
 
 class Scoreboard:
     GAMES_TO_WIN = 5
@@ -9,7 +10,10 @@ class Scoreboard:
         self.score[player] += points
 
     def current_score(self):
-        print(f'The score is {self.score['player']} : {self.score['computer']}')
+        print(messages['current_score'].format(
+            player = self.score['player'],
+            computer = self.score['computer']
+            ))
     
     def _reset(self):
         self.score['player'] = 0
@@ -33,13 +37,12 @@ class Human(Player):
         super().__init__()
 
     def choose(self):
-        prompt = 'Pick rock, paper, scissors, lizard, spock: '
         while True:
-            choice = input(prompt).lower()
+            choice = input(messages['choose']).lower()
             if choice in Player.CHOICES:
                 break
 
-            print('Invalid choice')
+            print(messages['invalid'])
 
         self.move = choice
 
@@ -70,30 +73,32 @@ class RPSGame:
         self._display_goodbye_message()
 
     def _display_welcome_message(self):
-        print('Welcome to Rock, Paper, Scissors, Lizard, Spock')
-        print('First one to 5 points wins. Good luck!')
+        print(messages['welcome'])
+        print(messages['game_rules'])
 
     def _display_goodbye_message(self):
-        print('Thanks for playing Rock, Paper, Scissors, Lizard, Spock. Goodbye!')
+        print(messages['goodbye'])
 
     def _display_winner(self):
         human_move = self._human.move
         computer_move = self._computer.move
 
-        print(f'You chose {self._human.move}')
-        print(f'The computer chose {self._computer.move}')
+        print(messages['human_choice'].format(move = self._human.move))
+        print(messages['computer_choice'].format(move = self._computer.move))
 
         if self._human_wins(human_move, computer_move):
             self.scores.add_points('player', 1)
-            print('You win!')
+            print(messages['win'])
         elif self._computer_wins(human_move, computer_move):
             self.scores.add_points('computer', 1)
-            print('You lose!')
+            print(messages['lose'])
         else:
-            print("It's a tie!")
+            print(messages['tie'])
 
     def _display_match_winner(self):
-        print(f"That's the match! {self._match_winner()}")
+        print(messages['match_over'].format(
+            match_winner = self._match_winner()
+            ))
 
     def _human_wins(self, human_move, computer_move):
         return computer_move in self.WINNING_COMBINATIONS[human_move]
@@ -102,16 +107,18 @@ class RPSGame:
         return human_move in self.WINNING_COMBINATIONS[computer_move]
 
     def _play_again(self):
-        answer = input('Would you like to play again? (y/n): ')
+        answer = input(messages['play_again'])
         return answer.lower().startswith('y')
     
     def _match_winner(self):
         if self.scores.score['player'] == 5:
-            return 'You win!'
-        return 'Computer wins!'
+            return messages['win']
+        return messages['computer_win']
     
     def _is_max_game_length(self):
         return any([num for num in self.scores.score.values() if num == 5])
 
+with open('rps_game.json', 'r') as file:
+    messages = json.load(file)
 
 RPSGame().play()
