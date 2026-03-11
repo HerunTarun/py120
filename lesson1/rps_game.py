@@ -20,7 +20,8 @@ class Scoreboard:
 
 
 class Player:
-    CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock')
+    CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock', 
+               'r', 'p', 's', 'l', 'sp')
     def __init__(self):
         self.move = None
 
