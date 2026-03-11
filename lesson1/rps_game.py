@@ -18,10 +18,76 @@ class Scoreboard:
         self.score['player'] = 0
         self.score['computer'] = 0
 
+class Move:
+    def __init__(self):
+        self._name = type(self).__name__.lower()
+    
+    def display(self, identity):
+        if identity == 'human':
+            return messages['human_choice'].format(move=self._name)
+        
+        return messages['computer_choice'].format(move=self._name)
+
+    def __str__(self):
+        return self.name
+    
+class Rock(Move):
+    def __init__(self):
+        super().__init__()
+        self._wins_against = [Scissors, Lizard]
+    
+    def __gt__(self, other):
+        if not isinstance(other, Move):
+            return NotImplemented
+        
+        return type(other) in self._wins_against
+
+class Paper(Move):
+    def __init__(self):
+        super().__init__()
+        self._wins_against = [Rock, Spock]
+    
+    def __gt__(self, other):
+        if not isinstance(other, Move):
+            return NotImplemented
+        
+        return type(other) in self._wins_against
+
+class Scissors(Move):
+    def __init__(self):
+        super().__init__()
+        self._wins_against = [Paper, Lizard]
+    
+    def __gt__(self, other):
+        if not isinstance(other, Move):
+            return NotImplemented
+        
+        return type(other) in self._wins_against
+
+class Lizard(Move):
+    def __init__(self):
+        super().__init__()
+        self._wins_against = [Paper, Spock]
+    
+    def __gt__(self, other):
+        if not isinstance(other, Move):
+            return NotImplemented
+        
+        return type(other) in self._wins_against
+
+class Spock(Move):
+    def __init__(self):
+        super().__init__()
+        self._wins_against = [Rock, Scissors]
+    
+    def __gt__(self, other):
+        if not isinstance(other, Move):
+            return NotImplemented
+        
+        return type(other) in self._wins_against
 
 class Player:
-    CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock', 
-               'r', 'p', 's', 'l', 'sp')
+    CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock', 'r', 'p', 's', 'l', 'sp')
     def __init__(self):
         self.move = None
 
@@ -30,7 +96,7 @@ class Computer(Player):
         super().__init__()
 
     def choose(self):
-        self.move = random.choice(Player.CHOICES)
+        self.move = random.choice(list(RPSGame.MOVES.values()))
 
 class Human(Player):
     def __init__(self):
@@ -40,18 +106,34 @@ class Human(Player):
         while True:
             choice = input(messages['choose']).lower()
             if choice in Player.CHOICES:
+                choice = self._format_choice(choice)
                 break
 
             print(messages['invalid'])
 
-        self.move = choice
+        self.move = RPSGame.MOVES[choice]
+
+    def _format_choice(self, choice):
+        match choice:
+            case 'r':
+                return 'rock'
+            case 's':
+                return 'scissors'
+            case 'p':
+                return 'paper'
+            case 'l':
+                return 'lizard'
+            case 'sp':
+                return 'spock'
+        return choice
 
 class RPSGame:
-    WINNING_COMBINATIONS = {'rock': ['scissors', 'lizard'],
-                        'scissors': ['paper', 'lizard'],
-                        'paper': ['rock', 'spock'],
-                        'lizard': ['spock', 'paper'],
-                        'spock': ['scissors', 'rock']}
+    MOVES = {'rock': Rock(),
+             'scissors': Scissors(),
+             'paper': Paper(),
+             'lizard': Lizard(),
+             'spock': Spock()}
+    
     def __init__(self):
         self._human = Human()
         self._computer = Computer()
@@ -83,13 +165,13 @@ class RPSGame:
         human_move = self._human.move
         computer_move = self._computer.move
 
-        print(messages['human_choice'].format(move=self._human.move))
-        print(messages['computer_choice'].format(move=self._computer.move))
+        print(human_move.display('human'))
+        print(computer_move.display('computer'))
 
-        if self._human_wins(human_move, computer_move):
+        if human_move > computer_move:
             self.scores.add_points('player', 1)
             print(messages['win'])
-        elif self._computer_wins(human_move, computer_move):
+        elif computer_move > human_move:
             self.scores.add_points('computer', 1)
             print(messages['lose'])
         else:
