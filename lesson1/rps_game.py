@@ -1,5 +1,6 @@
 import random
 import json
+import os
 
 class Scoreboard:
     GAMES_TO_WIN = 5
@@ -156,6 +157,7 @@ class RPSGame:
         self._display_goodbye_message()
 
     def _display_welcome_message(self):
+        self._clear_screen()
         print(messages['welcome'])
         print(messages['game_rules'])
 
@@ -180,6 +182,9 @@ class RPSGame:
 
     def _display_match_winner(self):
         print(messages['match_end'].format(match_winner=self._match_winner()))
+
+    def _clear_screen(self):
+        os.system('clear')
 
     def _play_again(self):
         answer = input(messages['play_again'])
