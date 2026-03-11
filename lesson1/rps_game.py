@@ -11,9 +11,8 @@ class Scoreboard:
 
     def current_score(self):
         print(messages['current_score'].format(
-            player = self.score['player'],
-            computer = self.score['computer']
-            ))
+            player=self.score['player'],
+            computer=self.score['computer']))
     
     def _reset(self):
         self.score['player'] = 0
@@ -83,8 +82,8 @@ class RPSGame:
         human_move = self._human.move
         computer_move = self._computer.move
 
-        print(messages['human_choice'].format(move = self._human.move))
-        print(messages['computer_choice'].format(move = self._computer.move))
+        print(messages['human_choice'].format(move=self._human.move))
+        print(messages['computer_choice'].format(move=self._computer.move))
 
         if self._human_wins(human_move, computer_move):
             self.scores.add_points('player', 1)
@@ -96,9 +95,7 @@ class RPSGame:
             print(messages['tie'])
 
     def _display_match_winner(self):
-        print(messages['match_over'].format(
-            match_winner = self._match_winner()
-            ))
+        print(messages['match_end'].format(match_winner=self._match_winner()))
 
     def _human_wins(self, human_move, computer_move):
         return computer_move in self.WINNING_COMBINATIONS[human_move]

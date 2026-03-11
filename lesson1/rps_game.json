@@ -11,6 +11,6 @@
     "computer_win": "Computer wins!",
     "lose": "You lose!",
     "tie": "It's a tie!",
-    "match_over": "That's the match! {match_winner}",
+    "match_end": "That's the match! {match_winner}",
     "play_again": "Would you like to play again? (y/n): "
 }
