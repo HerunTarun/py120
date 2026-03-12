@@ -205,7 +205,6 @@ class Human(Player):
             lines = self.scoreboard.query_history()
             self.scoreboard.display_history(lines)
 
-
     def _format_opponent(self, opponent):
         match opponent:
             case 'h':
