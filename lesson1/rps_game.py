@@ -120,6 +120,8 @@ class Spock(Move):
 class Player:
     CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock',
                'r', 'p', 's', 'l', 'sp')
+    OPTIONS = ('h', 'history')
+
     def __init__(self):
         self.move = None
 
@@ -147,10 +149,10 @@ class Human(Player):
         super().__init__()
         self.scoreboard = scoreboard
 
-    def choose(self):
+    def choose_move(self):
         while True:
             choice = input(messages['choose']).lower()
-            if choice in ['h', 'history']:
+            if choice in Player.OPTIONS:
                 lines = self.scoreboard.query_history()
                 self.scoreboard.display_history(lines)
                 continue
@@ -193,8 +195,8 @@ class RPSGame:
         self._display_welcome_message()
         self.scores.reset_score()
         while True:
-            self._human.choose()
-            self._computer.choose()
+            self._human.choose_move()
+            self._computer.choose_move()
             self._display_choices()
             winner = self._calculate_winner()
             self._display_winner(winner)
