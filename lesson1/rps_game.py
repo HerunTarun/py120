@@ -57,7 +57,8 @@ class Move:
         if identity == 'human':
             return messages['human_choice'].format(move=self._name)
 
-        return messages['computer_choice'].format(move=self._name)
+        return messages['computer_choice'].format(computer=identity,
+                                                  move=self._name)
 
     def __str__(self):
         return self._name
@@ -120,48 +121,55 @@ class Spock(Move):
 class Player:
     CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock',
                'r', 'p', 's', 'l', 'sp')
-    OPTIONS = ('h', 'history')
+    OPTIONS = ('his', 'history')
     OPPONENT_CHOICES = ('r2d2', 'daneel', 'hal', 'r', 'd', 'h')
 
-    def __init__(self):
+    def __init__(self, scoreboard):
         self.move = None
+        self.scoreboard = scoreboard
 
 class Computer(Player):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, scoreboard):
+        super().__init__(scoreboard)
 
     def choose_move(self):
         self.move = random.choice(list(RPSGame.MOVES.values()))
 
 class R2D2(Computer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, scoreboard):
+        super().__init__(scoreboard)
+        self.name = 'R2D2'
 
     def choose_move(self):
         self.move = Rock()
 
 class HAL(Computer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, scoreboard):
+        super().__init__(scoreboard)
+        self.name = 'HAL'
 
     def choose_move(self):
-        if random.choice([1, 2, 3]) % 2 == 0:
+        if random.choice(range(50)) % 3 == 0:
             self.move = random.choice(list(RPSGame.MOVES.values()))
-
-        self.move = Scissors()
+        else:
+            self.move = Scissors()
 
 
 class Daneel(Computer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, scoreboard):
+        super().__init__(scoreboard)
+        self.name = 'Daneel'
 
     def choose_move(self):
-        pass
+        if self.scoreboard.history:
+            self.move = self.scoreboard.history[-1][0]
+        else:
+            self.move = random.choice(list(RPSGame.MOVES.values()))
+
 
 class Human(Player):
     def __init__(self, scoreboard):
-        super().__init__()
-        self.scoreboard = scoreboard
+        super().__init__(scoreboard)
 
     def choose_move(self):
         while True:
@@ -183,7 +191,7 @@ class Human(Player):
             opponent = input(messages['choose_opponent']).lower()
             if opponent in Player.OPPONENT_CHOICES:
                 opponent = self._format_opponent(opponent)
-                return RPSGame.OPPONENTS[opponent]
+                return game.opponents[opponent]
             print(messages['invalid_opponent'])
 
 
@@ -216,21 +224,26 @@ class RPSGame:
              'paper': Paper(),
              'lizard': Lizard(),
              'spock': Spock()}
-    OPPONENTS = {'r2d2': R2D2(),
-                'daneel': Daneel(),
-                'hal': HAL()}
 
     def __init__(self):
         self.scores = Scoreboard()
         self._human = Human(self.scores)
         self._computer = None
+        self._opponents = {
+            'r2d2': R2D2(self.scores),
+            'daneel': Daneel(self.scores),
+            'hal': HAL(self.scores)}
 
+    @property
+    def opponents(self):
+        return self._opponents
 
     def play(self):
         self._display_welcome_message()
         self.scores.reset_score()
         while True:
             self._computer = self._human.choose_opponent()
+            self._display_opponent()
             while True:
                 self._human.choose_move()
                 self._computer.choose_move()
@@ -263,8 +276,10 @@ class RPSGame:
 
     def _display_choices(self):
         print(self._human.move.display('human'))
-        print(self._computer.move.display('computer'))
+        print(self._computer.move.display(f'{self._computer.name}'))
 
+    def _display_opponent(self):
+        print(messages['opponent_intro'].format(opponent=self._computer.name))
     def _calculate_winner(self):
         human_move = self._human.move
         computer_move = self._computer.move
@@ -318,4 +333,6 @@ class RPSGame:
 with open('rps_game.json', 'r') as file:
     messages = json.load(file)
 
-RPSGame().play()
+game = RPSGame()
+
+game.play()
