@@ -130,6 +130,18 @@ class Computer(Player):
     def choose(self):
         self.move = random.choice(list(RPSGame.MOVES.values()))
 
+class R2D2(Computer):
+    def __init__(self):
+        super().__init__()
+
+class HAL(Computer):
+    def __init__(self):
+        super().__init__()
+
+class Daneel(Computer):
+    def __init__(self):
+        super().__init__()
+
 class Human(Player):
     def __init__(self, scoreboard):
         super().__init__()
@@ -174,7 +186,7 @@ class RPSGame:
     def __init__(self):
         self.scores = Scoreboard()
         self._human = Human(self.scores)
-        self._computer = Computer()
+        self._computer = None
 
 
     def play(self):
