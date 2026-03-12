@@ -17,7 +17,7 @@
     "goodbye": "Thanks for playing Rock, Paper, Scissors, Lizard, Spock. Goodbye!",
     "display_history": "Player: {round[0]}, Opponent: {round[1]}, Result: {round[2]} ",
     "win": "You win!",
-    "computer_win": "Computer wins!",
+    "computer_win": "{computer} wins!",
     "lose": "You lose!",
     "tie": "It's a tie!",
     "match_end": "That's the match! {match_winner}",

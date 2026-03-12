@@ -324,7 +324,7 @@ class RPSGame:
     def _match_winner(self):
         if self.scores.score['player'] >= Scoreboard.GAMES_TO_WIN:
             return messages['win']
-        return messages['computer_win']
+        return messages['computer_win'].format(computer=self._computer.name)
 
     def _is_max_game_length(self):
         return any([num for num in self.scores.score.values()
