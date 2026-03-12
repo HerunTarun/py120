@@ -147,7 +147,10 @@ class RPSGame:
         while True:
             self._human.choose()
             self._computer.choose()
-            self._display_winner()
+            self._display_choices()
+            winner = self._calculate_winner()
+            self._display_winner(winner)
+            self._update_score(winner)
             self.scores.current_score()
             if self._is_max_game_length():
                 self.scores.reset()
@@ -164,21 +167,39 @@ class RPSGame:
     def _display_goodbye_message(self):
         print(messages['goodbye'])
 
-    def _display_winner(self):
+    def _display_choices(self):
+        print(self._human.move.display('human'))
+        print(self._computer.move.display('computer'))
+
+    def _calculate_winner(self):
         human_move = self._human.move
         computer_move = self._computer.move
 
-        print(human_move.display('human'))
-        print(computer_move.display('computer'))
-
         if human_move > computer_move:
-            self.scores.add_points('player', 1)
-            print(messages['win'])
+            return 'player'
         elif computer_move > human_move:
-            self.scores.add_points('computer', 1)
-            print(messages['lose'])
+            return 'computer'
         else:
-            print(messages['tie'])
+            return 'tie'
+
+    def _update_score(self, winner):
+        match winner:
+            case 'player':
+                self.scores.add_points('player', 1)
+            case 'computer':
+                self.scores.add_points('computer', 1)
+            case 'tie':
+                self.scores.add_points('computer', .5)
+                self.scores.add_points('player', .5)
+
+    def _display_winner(self, winner):
+        match winner:
+            case 'player':
+                print(messages['win'])
+            case 'computer':
+                print(messages['lose'])
+            case 'tie':
+                print(messages['tie'])
 
     def _display_match_winner(self):
         print(messages['match_end'].format(match_winner=self._match_winner()))
