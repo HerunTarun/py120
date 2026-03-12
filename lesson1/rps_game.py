@@ -144,15 +144,16 @@ class R2D2(Computer):
         self.move = Rock()
 
 class HAL(Computer):
+    SCISSOR_CHANCE = 60
     def __init__(self, scoreboard):
         super().__init__(scoreboard)
         self.name = 'HAL'
 
     def choose_move(self):
-        if random.choice(range(50)) % 3 == 0:
-            self.move = random.choice(list(RPSGame.MOVES.values()))
-        else:
+        if random.choice(range(100)) > self.SCISSOR_CHANCE:
             self.move = Scissors()
+        else:
+            self.move = random.choice(list(RPSGame.MOVES.values()))
 
 
 class Daneel(Computer):
