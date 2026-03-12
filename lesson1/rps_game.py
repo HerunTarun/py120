@@ -185,7 +185,7 @@ class Human(Player):
 
     def choose_move(self):
         while True:
-            choice = input(game.messages['choose_move']).lower()
+            choice = input(game.messages['choose_move']).strip().lower()
             if choice in Player.OPTIONS:
                 self._identify_option(choice)
                 continue
@@ -199,7 +199,7 @@ class Human(Player):
 
     def choose_opponent(self):
         while True:
-            opponent = input(game.messages['choose_opponent']).lower()
+            opponent = input(game.messages['choose_opponent']).strip().lower()
             if opponent in Player.OPTIONS:
                 self._identify_option(opponent)
                 continue
