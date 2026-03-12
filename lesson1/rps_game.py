@@ -229,13 +229,13 @@ class RPSGame:
         return answer.lower().startswith('y')
 
     def _match_winner(self):
-        if self.scores.score['player'] == Scoreboard.GAMES_TO_WIN:
+        if self.scores.score['player'] >= Scoreboard.GAMES_TO_WIN:
             return messages['win']
         return messages['computer_win']
 
     def _is_max_game_length(self):
         return any([num for num in self.scores.score.values()
-                    if num == Scoreboard.GAMES_TO_WIN])
+                    if num >= Scoreboard.GAMES_TO_WIN])
 
 with open('rps_game.json', 'r') as file:
     messages = json.load(file)
