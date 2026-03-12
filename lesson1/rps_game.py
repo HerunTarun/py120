@@ -170,6 +170,16 @@ class Daneel(Computer):
 
 
 class Human(Player):
+    ABBREVIATIONS = {
+        'r': 'rock',
+        'p': 'paper',
+        's': 'scissors',
+        'l': 'lizard',
+        'sp': 'spock',
+        'h': 'hal',
+        'd': 'daneel',
+        'r2': 'r2d2',
+    }
     def __init__(self, scoreboard):
         super().__init__(scoreboard)
 
@@ -207,27 +217,10 @@ class Human(Player):
             self.scoreboard.display_history(lines)
 
     def _format_opponent(self, opponent):
-        match opponent:
-            case 'h':
-                return 'hal'
-            case 'd':
-                return 'daneel'
-            case 'r':
-                return 'r2d2'
+        return self.ABBREVIATIONS.get(opponent, opponent)
 
     def _format_choice(self, choice):
-        match choice:
-            case 'r':
-                return 'rock'
-            case 's':
-                return 'scissors'
-            case 'p':
-                return 'paper'
-            case 'l':
-                return 'lizard'
-            case 'sp':
-                return 'spock'
-        return choice
+        return self.ABBREVIATIONS.get(choice, choice)
 
 class RPSGame:
     MOVES = {'rock': Rock(),
