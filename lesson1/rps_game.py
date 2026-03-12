@@ -26,9 +26,28 @@ class Scoreboard:
     def reset_history(self):
         self.history = []
 
-    def display_history(self):
-        for matchup in self.history:
-            print(messages['display_history'].format(round=matchup))
+    def query_history(self):
+        while True:
+            lines = input(messages['history_query'])
+            if lines.startswith('a'):
+                return len(self.history)
+            try:
+                lines = int(lines)
+            except ValueError:
+                print(messages['invalid_help'])
+                continue
+
+            if lines > len(self.history):
+                return len(self.history)
+
+            return lines
+
+    def display_history(self, lines):
+        if not lines:
+            print(messages['empty_history'])
+
+        for i in range(lines):
+            print(messages['display_history'].format(round=self.history[i]))
 
 class Move:
     def __init__(self):
@@ -112,17 +131,22 @@ class Computer(Player):
         self.move = random.choice(list(RPSGame.MOVES.values()))
 
 class Human(Player):
-    def __init__(self):
+    def __init__(self, scoreboard):
         super().__init__()
+        self.scoreboard = scoreboard
 
     def choose(self):
         while True:
             choice = input(messages['choose']).lower()
+            if choice in ['h', 'history']:
+                lines = self.scoreboard.query_history()
+                self.scoreboard.display_history(lines)
+                continue
             if choice in Player.CHOICES:
                 choice = self._format_choice(choice)
                 break
 
-            print(messages['invalid'])
+            print(messages['invalid_choice'])
 
         self.move = RPSGame.MOVES[choice]
 
@@ -148,9 +172,10 @@ class RPSGame:
              'spock': Spock()}
 
     def __init__(self):
-        self._human = Human()
-        self._computer = Computer()
         self.scores = Scoreboard()
+        self._human = Human(self.scores)
+        self._computer = Computer()
+
 
     def play(self):
         self._display_welcome_message()
@@ -192,30 +217,30 @@ class RPSGame:
         computer_move = self._computer.move
 
         if human_move > computer_move:
-            return 'player'
+            return 'Player wins!'
 
         if computer_move > human_move:
-            return 'computer'
+            return 'Computer wins!'
 
-        return 'tie'
+        return "It's a draw!"
 
     def _update_score(self, winner):
         match winner:
-            case 'player':
+            case 'Player wins!':
                 self.scores.add_points('player', 1)
-            case 'computer':
+            case 'Computer wins!':
                 self.scores.add_points('computer', 1)
-            case 'tie':
+            case "It's a draw!":
                 self.scores.add_points('computer', .5)
                 self.scores.add_points('player', .5)
 
     def _display_winner(self, winner):
         match winner:
-            case 'player':
+            case 'Player wins!':
                 print(messages['win'])
-            case 'computer':
+            case 'Computer wins!':
                 print(messages['lose'])
-            case 'tie':
+            case "It's a draw!":
                 print(messages['tie'])
 
     def _display_match_winner(self):
