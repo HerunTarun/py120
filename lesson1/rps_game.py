@@ -176,8 +176,7 @@ class Human(Player):
         while True:
             choice = input(messages['choose_move']).lower()
             if choice in Player.OPTIONS:
-                lines = self.scoreboard.query_history()
-                self.scoreboard.display_history(lines)
+                self._identify_option(choice)
                 continue
             if choice in Player.CHOICES:
                 choice = self._format_choice(choice)
@@ -190,10 +189,21 @@ class Human(Player):
     def choose_opponent(self):
         while True:
             opponent = input(messages['choose_opponent']).lower()
+            if opponent in Player.OPTIONS:
+                self._identify_option(opponent)
+                continue
+
             if opponent in Player.OPPONENT_CHOICES:
                 opponent = self._format_opponent(opponent)
                 return game.opponents[opponent]
             print(messages['invalid_opponent'])
+
+    def _identify_option(self, option):
+        history = ['his', 'history']
+
+        if option in history:
+            lines = self.scoreboard.query_history()
+            self.scoreboard.display_history(lines)
 
 
     def _format_opponent(self, opponent):
