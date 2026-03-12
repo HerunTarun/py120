@@ -6,6 +6,7 @@ class Scoreboard:
     GAMES_TO_WIN = 5
     def __init__(self):
         self.score = {'player': 0, 'computer': 0}
+        self.history = []
 
     def add_points(self, player, points):
         self.score[player] += points
@@ -15,9 +16,19 @@ class Scoreboard:
             player=self.score['player'],
             computer=self.score['computer']))
 
-    def reset(self):
+    def reset_score(self):
         self.score['player'] = 0
         self.score['computer'] = 0
+
+    def update_history(self, player_move, computer_move, winner):
+        self.history.append((player_move, computer_move, winner))
+
+    def reset_history(self):
+        self.history = []
+
+    def display_history(self):
+        for round in self.history:
+            print(f'Player: {round[0]}, Computer: {round[1]}, Winner: {round[2]} ')
 
 class Move:
     def __init__(self):
@@ -143,7 +154,7 @@ class RPSGame:
 
     def play(self):
         self._display_welcome_message()
-        self.scores.reset()
+        self.scores.reset_score()
         while True:
             self._human.choose()
             self._computer.choose()
@@ -151,11 +162,16 @@ class RPSGame:
             winner = self._calculate_winner()
             self._display_winner(winner)
             self._update_score(winner)
+            self.scores.update_history(self._human.move,
+                                       self._computer.move,
+                                       winner)
+            self.scores.display_history()
             self.scores.current_score()
             if self._is_max_game_length():
-                self.scores.reset()
+                self.scores.reset_score()
                 self._display_match_winner()
                 if not self._play_again():
+                    self.scores.reset_history()
                     break
         self._display_goodbye_message()
 
