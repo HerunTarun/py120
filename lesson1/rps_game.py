@@ -121,6 +121,7 @@ class Player:
     CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock',
                'r', 'p', 's', 'l', 'sp')
     OPTIONS = ('h', 'history')
+    OPPONENT_CHOICES = ('r2d2', 'daneel', 'hal', 'r', 'd', 'h')
 
     def __init__(self):
         self.move = None
@@ -129,20 +130,33 @@ class Computer(Player):
     def __init__(self):
         super().__init__()
 
-    def choose(self):
+    def choose_move(self):
         self.move = random.choice(list(RPSGame.MOVES.values()))
 
 class R2D2(Computer):
     def __init__(self):
         super().__init__()
 
+    def choose_move(self):
+        self.move = Rock()
+
 class HAL(Computer):
     def __init__(self):
         super().__init__()
 
+    def choose_move(self):
+        if random.choice([1, 2, 3]) % 2 == 0:
+            self.move = random.choice(list(RPSGame.MOVES.values()))
+
+        self.move = Scissors()
+
+
 class Daneel(Computer):
     def __init__(self):
         super().__init__()
+
+    def choose_move(self):
+        pass
 
 class Human(Player):
     def __init__(self, scoreboard):
@@ -151,7 +165,7 @@ class Human(Player):
 
     def choose_move(self):
         while True:
-            choice = input(messages['choose']).lower()
+            choice = input(messages['choose_move']).lower()
             if choice in Player.OPTIONS:
                 lines = self.scoreboard.query_history()
                 self.scoreboard.display_history(lines)
@@ -163,6 +177,24 @@ class Human(Player):
             print(messages['invalid_choice'])
 
         self.move = RPSGame.MOVES[choice]
+
+    def choose_opponent(self):
+        while True:
+            opponent = input(messages['choose_opponent']).lower()
+            if opponent in Player.OPPONENT_CHOICES:
+                opponent = self._format_opponent(opponent)
+                return RPSGame.OPPONENTS[opponent]
+            print(messages['invalid_opponent'])
+
+
+    def _format_opponent(self, opponent):
+        match opponent:
+            case 'h':
+                return 'hal'
+            case 'd':
+                return 'daneel'
+            case 'r':
+                return 'r2d2'
 
     def _format_choice(self, choice):
         match choice:
@@ -184,6 +216,9 @@ class RPSGame:
              'paper': Paper(),
              'lizard': Lizard(),
              'spock': Spock()}
+    OPPONENTS = {'r2d2': R2D2(),
+                'daneel': Daneel(),
+                'hal': HAL()}
 
     def __init__(self):
         self.scores = Scoreboard()
@@ -195,22 +230,25 @@ class RPSGame:
         self._display_welcome_message()
         self.scores.reset_score()
         while True:
-            self._human.choose_move()
-            self._computer.choose_move()
-            self._display_choices()
-            winner = self._calculate_winner()
-            self._display_winner(winner)
-            self._update_score(winner)
-            self.scores.update_history(self._human.move,
-                                       self._computer.move,
-                                       winner)
-            self.scores.current_score()
-            if self._is_max_game_length():
-                self.scores.reset_score()
-                self._display_match_winner()
-                if not self._play_again():
-                    self.scores.reset_history()
-                    break
+            self._computer = self._human.choose_opponent()
+            while True:
+                self._human.choose_move()
+                self._computer.choose_move()
+                self._display_choices()
+                winner = self._calculate_winner()
+                self._display_winner(winner)
+                self._update_score(winner)
+                self.scores.update_history(self._human.move,
+                                        self._computer.move,
+                                        winner)
+                self.scores.current_score()
+                if self._is_max_game_length():
+                    self.scores.reset_score()
+                    self._display_match_winner()
+                    if not self._play_again():
+                        self.scores.reset_history()
+                        break
+            break
         self._display_goodbye_message()
 
     def _display_welcome_message(self):
