@@ -204,6 +204,7 @@ class RPSGame:
         print(messages['welcome'])
         print(messages['game_rules'])
         print(messages['point_system'])
+        print(messages['history_intro'])
 
     def _display_goodbye_message(self):
         print(messages['goodbye'])
