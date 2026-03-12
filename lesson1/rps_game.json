@@ -5,7 +5,7 @@
     "history_intro": "If you'd like to see your move history, type 'his' or 'history' at any point!",
     "choose_opponent": "Choose your opponent! Your choices are Hal, Daneel, or R2D2: ",
     "opponent_intro": "You have chosen {opponent}!",
-    "invalid_opponent": "Sorry, I didn't understand.  If you'd like, choose an abbrieviation, like h, d, or r!",
+    "invalid_opponent": "Sorry, I didn't understand.  If you'd like, choose an abbrieviation, like h, d, or r2!",
     "choose_move": "Pick rock, paper, scissors, lizard, spock: ",
     "invalid_choice": "That won't work! If you'd like, choose an abbrieviation, like r, p, s, l, or sp!",
     "history_query": "How many rounds do you wish to see? Please pick a number, or 'all': ",
