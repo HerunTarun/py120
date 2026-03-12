@@ -27,8 +27,8 @@ class Scoreboard:
         self.history = []
 
     def display_history(self):
-        for round in self.history:
-            print(f'Player: {round[0]}, Computer: {round[1]}, Winner: {round[2]} ')
+        for matchup in self.history:
+            print(messages['display_history'].format(round=matchup))
 
 class Move:
     def __init__(self):
@@ -165,7 +165,6 @@ class RPSGame:
             self.scores.update_history(self._human.move,
                                        self._computer.move,
                                        winner)
-            self.scores.display_history()
             self.scores.current_score()
             if self._is_max_game_length():
                 self.scores.reset_score()
@@ -194,10 +193,11 @@ class RPSGame:
 
         if human_move > computer_move:
             return 'player'
-        elif computer_move > human_move:
+
+        if computer_move > human_move:
             return 'computer'
-        else:
-            return 'tie'
+
+        return 'tie'
 
     def _update_score(self, winner):
         match winner:

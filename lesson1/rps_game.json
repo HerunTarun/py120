@@ -8,6 +8,7 @@
     "computer_choice": "The computer chose {move}!",
     "current_score": "The score is {player} : {computer}",
     "goodbye": "Thanks for playing Rock, Paper, Scissors, Lizard, Spock. Goodbye!",
+    "display_history": "Player: {round[0]}, Computer: {round[1]}, Winner: {round[2]} ",
     "win": "You win!",
     "computer_win": "Computer wins!",
     "lose": "You lose!",
