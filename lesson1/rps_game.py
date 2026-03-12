@@ -257,12 +257,12 @@ class RPSGame:
                                         winner)
                 self.scores.current_score()
                 if self._is_max_game_length():
-                    self.scores.reset_score()
                     self._display_match_winner()
-                    if not self._play_again():
-                        self.scores.reset_history()
-                        break
-            break
+                    self.scores.reset_score()
+                    break
+            if not self._play_again():
+                self.scores.reset_history()
+                break
         self._display_goodbye_message()
 
     def _display_welcome_message(self):
