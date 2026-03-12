@@ -1,6 +1,7 @@
 {
     "welcome": "Welcome to Rock, Paper, Scissors, Lizard, Spock",
     "game_rules": "First one to 5 points wins. Good luck!",
+    "point_system": "You get 1 point for a win, .5 points for a tie, and 0 points for a loss!",
     "choose": "Pick rock, paper, scissors, lizard, spock: ",
     "invalid": "That won't work! If you'd like, choose an abbrieviation, like, r, p, s, l, or sp!",
     "human_choice": "You chose {move}!",

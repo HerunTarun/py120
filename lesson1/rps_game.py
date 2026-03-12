@@ -163,6 +163,7 @@ class RPSGame:
         self._clear_screen()
         print(messages['welcome'])
         print(messages['game_rules'])
+        print(messages['point_system'])
 
     def _display_goodbye_message(self):
         print(messages['goodbye'])
